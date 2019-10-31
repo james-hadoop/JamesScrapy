@@ -81,7 +81,10 @@ class ShenzhenSpider(scrapy.Spider):
         return items
 
 
-process = CrawlerProcess()
-process.crawl(ShanghaiSpider)
-process.crawl(ShenzhenSpider)
-process.start()
+if __name__ == '__main__':
+    from scrapy.crawler import CrawlerProcess
+
+    process = CrawlerProcess()
+    process.crawl(ShanghaiSpider)
+    process.crawl(ShenzhenSpider)
+    process.start()

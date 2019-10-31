@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a63f10af-5374-40e9-8a73-e34ec1a92a16" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/weather/spiders/multiwebsiteSpider.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/weather/spiders/shanghaiSpider.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather/spiders/shanghaiSpider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/spiders/multiwebsiteSpider.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather/spiders/multiwebsiteSpider.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -88,7 +86,7 @@
       <workItem from="1572172494576" duration="89000" />
       <workItem from="1572172597763" duration="8304000" />
       <workItem from="1572449108448" duration="839000" />
-      <workItem from="1572480583650" duration="2390000" />
+      <workItem from="1572480583650" duration="2801000" />
     </task>
     <servers />
   </component>
@@ -112,6 +110,6 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/weather$multiwebsiteSpider.coverage" NAME="multiwebsiteSpider Coverage Results" MODIFIED="1572482760772" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/weather/spiders" />
+    <SUITE FILE_PATH="coverage/weather$multiwebsiteSpider.coverage" NAME="multiwebsiteSpider Coverage Results" MODIFIED="1572483529104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/weather/spiders" />
   </component>
 </project>
