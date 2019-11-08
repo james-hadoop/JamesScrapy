@@ -38,4 +38,4 @@ class JsSpider(CrawlSpider):
             article_id=article_id
         )
 
-        yield item
+        return item
