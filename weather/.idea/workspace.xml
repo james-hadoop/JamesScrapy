@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a63f10af-5374-40e9-8a73-e34ec1a92a16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/weather/spiders/multiwebsiteSpider.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather/spiders/multiwebsiteSpider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jianshu_spider/jianshu_spider/pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/../jianshu_spider/jianshu_spider/pipelines.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +86,7 @@
       <workItem from="1572172597763" duration="8304000" />
       <workItem from="1572449108448" duration="839000" />
       <workItem from="1572480583650" duration="3589000" />
+      <workItem from="1573220478445" duration="31000" />
     </task>
     <servers />
   </component>

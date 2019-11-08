@@ -12,7 +12,7 @@ class JsSpider(CrawlSpider):
     start_urls = ['http://jianshu.com/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*/p/[0-9a-z]{12}.*'), callback='parse_detail', follow=True),
+        Rule(LinkExtractor(allow=r'.*/p/[0-9a-z]{12}.*'), callback='parse_detail', follow=False),
     )
 
     def parse_detail(self, response):
@@ -31,10 +31,11 @@ class JsSpider(CrawlSpider):
         item = ArticleItem(
             title=title,
             content=content,
-            article_id=article_id,
-            origin_url=origin_url,
+            author=author,
             avatar=avatar,
-            pub_time=pub_time
+            pub_time=pub_time,
+            origin_url=origin_url,
+            article_id=article_id
         )
 
-
+        yield item

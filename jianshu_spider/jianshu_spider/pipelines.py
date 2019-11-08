@@ -6,9 +6,13 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 import pymysql
 
+
 class JianshuSpiderPipeline(object):
     def __init__(self):
-        dbparams = {'host': '127.0.0.1',
+        print('-' * 60)
+        print('JianshuSpiderPipeline')
+        print('-' * 60)
+        dbparams = {'host': 'localhost',
                     'port': 3306,
                     'user': 'developer',
                     'password': 'developer',
@@ -21,10 +25,13 @@ class JianshuSpiderPipeline(object):
 
     def process_item(self, item, spider):
         print('>>> called process_item()')
+        print(self.sql)
+        print('*' * 10)
+        print(item['title'], item['content'], item['author'], item['pub_time'], item['origin_url'],
+              item['article_id'])
         self.cursor.execute(self.sql, (
-        item['title'], item['content'], item['author'], item['avatar'], item['pub_time'], item['origin_url'],
-        item['article_id']))
-        print('>>> '+item)
+            item['title'], item['content'], item['author'], item['pub_time'], item['origin_url'],
+            item['article_id']))
         self.conn.commit()
         return item
 
@@ -32,7 +39,7 @@ class JianshuSpiderPipeline(object):
     def sql(self):
         if not self._sql:
             self._sql = """
-            insert into jianshu_article(id,title,content,author,avatar,pub_time,origin_url,article_id) values (null,%s,%s,%s,%s,%s,%s)
+            insert into jianshu_article(id, title,content,author,pub_time,origin_url,article_id) values (null,%s,%s,%s,%s,%s,%s)
             """
             return self._sql
         return self._sql
