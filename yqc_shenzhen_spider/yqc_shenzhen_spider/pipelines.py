@@ -23,6 +23,8 @@ class YqcShenzhenSpiderPipeline(object):
         self.dbpool = adbapi.ConnectionPool('pymysql', **dbparams)
         self._sql = None
 
+        self.titleSet = set()
+
     @property
     def sql(self):
         if not self._sql:
@@ -40,11 +42,14 @@ class YqcShenzhenSpiderPipeline(object):
         cont_dict = item['cont_dict']
 
         for v in cont_dict.values():
-            cursor.execute(self.sql, (
-                v['title'], v['url'], v['pub_time'], v['pub_org'], v['doc_id'], v['index_id'],
-                v['key_cnt'], v['cont']))
+            if v['title'] not in self.titleSet:
+                cursor.execute(self.sql, (
+                    v['title'], v['url'], v['pub_time'], v['pub_org'], v['doc_id'], v['index_id'],
+                    v['key_cnt'], v['cont']))
+
+                self.titleSet.add(v['title'])
 
     def handle_error(self, error, item, spider):
-        logging.error('=' * 10 + 'error' + '=' * 10)
+        logging.error('-' * 10 + ' error ' + ' ' * 10)
         logging.error(error)
-        logging.error('=' * 10 + 'error' + '=' * 10)
+        logging.error('-' * 10 + ' error ' + ' ' * 10)
