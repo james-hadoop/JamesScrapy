@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 import re
-
-import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-
-from yqc_shenzhen_spider.items import YqcShenzhenSpiderItem
+from yqc_hangzhou_spider.items import YqcHangzhouSpiderItem
 
 keys = ['创新',
         '创业',
@@ -53,36 +50,30 @@ keys = ['创新',
         '深化']
 
 
-class ShenzhenSpider(CrawlSpider):
-    name = 'shenzhen'
-    allowed_domains = ['sz.gov.cn']
-    start_urls = ['http://www.sz.gov.cn/zfwj/']
+class HangzhouSpider(CrawlSpider):
+    name = 'hangzhou'
+    allowed_domains = ['hangzhou.gov.cn']
+    start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*sz.gov.cn/zfgb/2019.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*hangzhou.gov.cn/art/2019.*'), callback='parse_item', follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        # title = response.xpath("//*[@id='top_bg']/div/div[4]/div[4]/div[2]/ul/li[3]/p[1]/a/@title").get()
-        title = response.xpath("//div[@class='tit']/h1/text()").get()
-        cont = response.xpath("//div[@class='news_cont_d_wrap']").get()
-        index_id = response.xpath("//div[@class='xx_con']/p[1]/text()").get()
-        pub_org = response.xpath("//div[@class='xx_con']/p[3]/text()").get()
-        pub_time = response.xpath("//div[@class='xx_con']/p[4]/text()").get()
-        doc_id = response.xpath("//div[@class='xx_con']/p[6]/text()").get()
+        title = response.xpath("//td[@class='title']/text()").get()
+        cont = response.xpath("//td[@class='bt_content']").get()
+        index_id = response.xpath("//body/div[3]/table[2]/tr[1]/td[2]/text()").get()
+        pub_org = response.xpath("//body/div[3]/table[2]/tr[3]/td[2]/text()").get()
+        pub_time = response.xpath("//body/div[3]/table[2]/tr[2]/td[4]/text()").get()
+        doc_id = response.xpath("//body/div[3]/table[2]/tr[2]/td[2]/text()").get()
 
         for key in keys:
             if key in title:
                 self.dict_add_one(title, response.url, re.sub('[\s+]', ' ', cont), pub_time, pub_org, index_id, doc_id)
 
-        item = YqcShenzhenSpiderItem(cont_dict=self.cont_dict)
-
-        # print('>>>>')
-        # print(index_id)
-        # print(self.cont_dict)
-        # print(self.cont_dict.__len__())
+        item = YqcHangzhouSpiderItem(cont_dict=self.cont_dict)
 
         return item
 
