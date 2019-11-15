@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
+import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from yqc_hangzhou_spider.items import YqcHangzhouSpiderItem
+
+from yqc_beijing_spider.items import YqcBeijingSpiderItem
 
 keys = ['创新',
         '创业',
@@ -50,32 +52,37 @@ keys = ['创新',
         '深化']
 
 
-class HangzhouSpider(CrawlSpider):
-    name = 'hangzhou'
-    allowed_domains = ['hangzhou.gov.cn']
-    start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/']
+class BeijingSpider(CrawlSpider):
+    name = 'beijing'
+    allowed_domains = ['beijing.gov.cn']
+    start_urls = ['http://www.beijing.gov.cn/zhengce/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*beijing.gov.cn/zhengce/zhengcefagui/201911.*'), callback='parse_item',
+             follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        title = response.xpath("//td[@class='title']/text()").get()
-        cont = response.xpath("//td[@class='bt_content']").get()
-        index_id = response.xpath("//body/div[3]/table[2]/tr[1]/td[2]/text()").get()
-        pub_org = response.xpath("//body/div[3]/table[2]/tr[3]/td[2]/text()").get()
-        pub_time = response.xpath("//body/div[3]/table[2]/tr[2]/td[4]/text()").get()
-        doc_id = response.xpath("//body/div[3]/table[2]/tr[2]/td[2]/text()").get()
+        title = response.xpath("//body/div[1]/div/h1/text()").get()
+        cont = response.xpath("//div[@class='TRS_Editor']").get()
+        index_id = response.xpath("//div[@class='xx_con']/p[1]/text()").get()
+        pub_org = response.xpath("//div[@class='xx_con']/p[3]/text()").get()
+        pub_time = response.xpath("//body/div[1]/div/h4/text()").get()
+        doc_id = response.xpath("//div[@class='xx_con']/p[6]/text()").get()
+        print('>>> '+str(title))
 
         for key in keys:
             if key in title:
                 self.dict_add_one(title, response.url, re.sub('[\s+]', ' ', cont), pub_time, pub_org, index_id, doc_id)
 
-        item = YqcHangzhouSpiderItem(cont_dict=self.cont_dict)
-        print('>>>>')
-        print(self.cont_dict)
+        item = YqcBeijingSpiderItem(cont_dict=self.cont_dict)
+
+        # print('>>>>')
+        # print(index_id)
+        # print(self.cont_dict)
+        # print(self.cont_dict.__len__())
 
         return item
 
