@@ -59,19 +59,24 @@ class BeijingSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=r'.*beijing.gov.cn/zhengce/zhengcefagui/201911.*'), callback='parse_item',
-             follow=False),
+             follow=True),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        title = response.xpath("//body/div[1]/div/h1/text()").get()
-        cont = response.xpath("//div[@class='TRS_Editor']").get()
-        index_id = response.xpath("//div[@class='xx_con']/p[1]/text()").get()
-        pub_org = response.xpath("//div[@class='xx_con']/p[3]/text()").get()
-        pub_time = response.xpath("//body/div[1]/div/h4/text()").get()
-        doc_id = response.xpath("//div[@class='xx_con']/p[6]/text()").get()
-        print('>>> '+str(title))
+        # title = response.xpath("//body/div[1]/div/h1/text()").get()
+        title = response.xpath("//div[@class='header']/p/text()").get()
+        # cont = response.xpath("//div[@class='TRS_Editor']").get()
+        cont = response.xpath("//div[@class='view TRS_UEDITOR trs_paper_default trs_web']/p").get()
+        index_id = ''
+        # pub_org = response.xpath("//div[@class='xx_con']/p[3]/text()").get()
+        pub_org = response.xpath("//div[@class='container']/ol/li[2]/span/text()").get()
+        # pub_time = response.xpath("//body/div[1]/div/h4/text()").get()
+        pub_time = response.xpath("//div[@class='container']/ol/li[8]/span/text()").get()
+        # doc_id = response.xpath("//div[@class='xx_con']/p[6]/text()").get()
+        doc_id = response.xpath("//div[@class='container']/ol/li[6]/span").get()
+        print('>>> ' + str(title))
 
         for key in keys:
             if key in title:
