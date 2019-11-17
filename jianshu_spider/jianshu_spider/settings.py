@@ -47,7 +47,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'jianshu_spider.middlewares.JianshuSpiderSpiderMiddleware': 543,
+#    'jianshu_spider.middlewares.SeleniumDownloadMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares

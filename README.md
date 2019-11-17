@@ -12,6 +12,12 @@ DEFAULT_REQUEST_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
 }
 
+
+### web driver
+https://github.com/mozilla/geckodriver/releases/tag/v0.26.0
+https://sites.google.com/a/chromium.org/chromedriver/downloads
+https://webkit.org/downloads/
+
 ### mysql table
 drop table jianshu_article;
 
@@ -44,3 +50,5 @@ CREATE TABLE `yqc_shenzhen` (
   KEY `index_pub_org` (`pub_org`),
   KEY `index_pub_time` (`pub_time`)
 ) DEFAULT CHARSET=utf8 COMMENT='james__yqc_shenzhen爬虫数据';
+
+

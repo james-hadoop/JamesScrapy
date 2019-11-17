@@ -24,9 +24,18 @@ class JsSpider(CrawlSpider):
         origin_url = response.url
         author = response.xpath("//div[1]/div/div/section[1]/div[1]/div/div/div[1]/span/a/text()").get()
         avatar = response.xpath("//a[@class='_1OhGeD']/img/@src").get()
-        pub_time = response.xpath("//span[@class='_3tCVn5']/time/text()").get()
+        pub_time = response.xpath("//div[@class='s-dsoj']/time/text()").get()
+
+        word_count = response.xpath("//div[@class='s-dsoj']/span[2]/text()").get()
+        read_count = response.xpath("//div[@class='s-dsoj']/span[3]/text()").get()
+        like_count = response.xpath("//div[@class='_3U4Smb']/div[@class='s-dsoj']/span[1]/span/text()").get()
+
+        # subjects = ",".join(response.xpath("/div[@class='include-collection]/a/div/text()").getall())
 
         print(title)
+        print(pub_time)
+        print(word_count)
+        print(like_count)
 
         item = ArticleItem(
             title=title,
@@ -35,7 +44,10 @@ class JsSpider(CrawlSpider):
             avatar=avatar,
             pub_time=pub_time,
             origin_url=origin_url,
-            article_id=article_id
+            article_id=article_id,
+            read_count=read_count,
+            like_count=like_count,
+            word_count=word_count
         )
 
-        return item
+        yield item
