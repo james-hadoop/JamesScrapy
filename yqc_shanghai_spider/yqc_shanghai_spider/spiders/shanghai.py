@@ -57,7 +57,8 @@ class ShanghaiSpider(CrawlSpider):
     start_urls = ['http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344.*'), callback='parse_item',
+             follow=False),
     )
 
     cont_dict = {}
@@ -77,7 +78,8 @@ class ShanghaiSpider(CrawlSpider):
 
         for key in keys:
             if key in title:
-                self.dict_add_one(title, response.url, re.sub('[\s+]', ' ', cont), pub_time, pub_org, index_id, doc_id)
+                self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
+                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id)
 
         item = YqcShanghaiSpiderItem(cont_dict=self.cont_dict)
         print('>>>>')
