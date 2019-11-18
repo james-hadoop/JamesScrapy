@@ -13,9 +13,10 @@ from scrapy.http.response.html import HtmlResponse
 
 class SeleniumDownloadMiddleware(object):
     def __init__(self):
-        self.driver = webdriver.Firefox(executable_path=r"/home/james/_AllDocMap/06_Software/geckodriver")
+        self.driver = webdriver.Chrome(executable_path=r"/home/james/_AllDocMap/06_Software/chromedriver")
 
     def process_request(self, request, spider):
+        print(">>>\n\t" + request.url)
         self.driver.get(request.url)
 
         time.sleep(1)
@@ -31,6 +32,6 @@ class SeleniumDownloadMiddleware(object):
             pass
 
         source = self.driver.page_source
-        response = HtmlResponse(url=self.driver.current_url, body=source, request=request)
+        response = HtmlResponse(url=self.driver.current_url, body=source, request=request,encoding="utf-8")
 
         return response

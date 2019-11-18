@@ -31,11 +31,14 @@ class JsSpider(CrawlSpider):
         like_count = response.xpath("//div[@class='_3U4Smb']/div[@class='s-dsoj']/span[1]/span/text()").get()
 
         # subjects = ",".join(response.xpath("/div[@class='include-collection]/a/div/text()").getall())
-
+        print(">>>")
         print(title)
         print(pub_time)
         print(word_count)
-        print(like_count)
+        print(read_count)
+
+        if not read_count:
+            read_count=str("_NULL")
 
         item = ArticleItem(
             title=title,
