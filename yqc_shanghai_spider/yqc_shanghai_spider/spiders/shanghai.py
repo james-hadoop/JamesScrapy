@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from yqc_hangzhou_spider.items import YqcHangzhouSpiderItem
+from yqc_shanghai_spider.items import YqcShanghaiSpiderItem
 
 keys = ['创新',
         '创业',
@@ -50,30 +51,35 @@ keys = ['创新',
         '深化']
 
 
-class HangzhouSpider(CrawlSpider):
-    name = 'hangzhou'
-    allowed_domains = ['hangzhou.gov.cn']
-    start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/']
+class ShanghaiSpider(CrawlSpider):
+    name = 'shanghai'
+    allowed_domains = ['shanghai.gov.cn']
+    start_urls = ['http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*www.hangzhou.gov.cn/art/2019.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344.*'), callback='parse_item', follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        title = response.xpath("//td[@class='title']/text()").get()
-        cont = response.xpath("//td[@class='bt_content']").get()
-        index_id = response.xpath("//body/div[3]/table[2]/tr[1]/td[2]/text()").get()
-        pub_org = response.xpath("//body/div[3]/table[2]/tr[3]/td[2]/text()").get()
-        pub_time = response.xpath("//body/div[3]/table[2]/tr[2]/td[4]/text()").get()
-        doc_id = response.xpath("//body/div[3]/table[2]/tr[2]/td[2]/text()").get()
+        title = response.xpath("//div[@id='ivs_title']/text()").get()
+        cont = response.xpath("//div[@id='ivs_content']/text()").get()
+        index_id = str('_NULL')
+        pub_org = str('_NULL')
+        pub_time = response.xpath("//div[@id='ivs_date']/text()").get()
+        doc_id = str('_NULL')
+
+        print(title)
+
+        if not title:
+            return
 
         for key in keys:
             if key in title:
                 self.dict_add_one(title, response.url, re.sub('[\s+]', ' ', cont), pub_time, pub_org, index_id, doc_id)
 
-        item = YqcHangzhouSpiderItem(cont_dict=self.cont_dict)
+        item = YqcShanghaiSpiderItem(cont_dict=self.cont_dict)
         print('>>>>')
         print(self.cont_dict)
 
