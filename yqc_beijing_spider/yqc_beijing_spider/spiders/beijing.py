@@ -58,7 +58,7 @@ class BeijingSpider(CrawlSpider):
     start_urls = ['http://www.beijing.gov.cn/zhengce/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*beijing.gov.cn/zhengce/zhengcefagui/201911.*'), callback='parse_item',
+        Rule(LinkExtractor(allow=r'.*beijing.gov.cn/zhengce/zhengcefagui/2019.*'), callback='parse_item',
              follow=True),
     )
 

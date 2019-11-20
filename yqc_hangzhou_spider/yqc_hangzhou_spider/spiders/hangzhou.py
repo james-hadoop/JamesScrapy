@@ -63,7 +63,7 @@ class HangzhouSpider(CrawlSpider):
 
     def parse_item(self, response):
         title = response.xpath("//td[@class='title']/text()").get()
-        cont = response.xpath("//td[@class='bt_content']").get()
+        cont = response.xpath("//tr[@class='tr_main_value_odd']").get()
         index_id = response.xpath("//body/div[3]/table[2]/tr[1]/td[2]/text()").get()
         pub_org = response.xpath("//body/div[3]/table[2]/tr[3]/td[2]/text()").get()
         pub_time = response.xpath("//body/div[3]/table[2]/tr[2]/td[4]/text()").get()

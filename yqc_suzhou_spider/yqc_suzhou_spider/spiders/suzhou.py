@@ -59,7 +59,7 @@ class SuzhouSpider(CrawlSpider):
     start_urls = ['http://www.suzhou.gov.cn/xxgk/zdgcjsxmssjz/sbj_11124/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*suzhou.gov.cn/xxgk/zdgcjsxmssjz.*'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'.*suzhou.gov.cn/xxgk/zdgcjsxmssjz.*'), callback='parse_item', follow=False),
     )
 
     cont_dict = {}
