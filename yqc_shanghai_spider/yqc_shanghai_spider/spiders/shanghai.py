@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import datetime
+import logging
+
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
@@ -50,28 +53,35 @@ keys = ['创新',
         '降低',
         '深化']
 
+count = 1
 
 class ShanghaiSpider(CrawlSpider):
     name = 'shanghai'
     allowed_domains = ['shanghai.gov.cn']
-    start_urls = ['http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344/index.html']
+    start_urls = ['http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344.*'), callback='parse_item',
+        Rule(LinkExtractor(allow=r'.*xingzhengwendangku.*'),
+             callback='parse_page',
              follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        title = response.xpath("//div[@id='ivs_title']/text()").get()
+        print
+
+        title = response.xpath("//*[@id='ivs_content']/p[5]/strong/span/span/text()").get()
         cont = response.xpath("//div[@id='ivs_content']/text()").get()
         index_id = str('_NULL')
         pub_org = str('_NULL')
         pub_time = response.xpath("//div[@id='ivs_date']/text()").get()
         doc_id = str('_NULL')
+        region = str('上海')
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         print(title)
+        print(cont)
 
         if not title:
             return
@@ -79,7 +89,7 @@ class ShanghaiSpider(CrawlSpider):
         for key in keys:
             if key in title:
                 self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id)
+                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
 
         item = YqcShanghaiSpiderItem(cont_dict=self.cont_dict)
         print('>>>>')
@@ -87,11 +97,32 @@ class ShanghaiSpider(CrawlSpider):
 
         return item
 
-    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id):
+    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
         else:
             cnt_dict = {'key_cnt': 1, 'title': title, 'url': url, 'cont': cont, 'pub_time': pub_time,
-                        'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id}
+                        'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id, 'region': region,
+                        'update_time': update_time}
 
             self.cont_dict[title] = cnt_dict
+
+    def parse_page(self, response):
+        global count
+        print(">>> parse_page(): "+str(count))
+        count += 1
+
+        self.log("====| %s |" % response.url, level=logging.INFO)
+
+        tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
+        # print(tr_list)
+
+        for tr in tr_list:
+            # print(tr)
+            url = tr.xpath("./td[1]/a/@href").get()
+            print("\t" + str(url))
+
+        next_pages = response.xpath("//*[@id='main']/div[1]/div/div[2]/nav/ul/li[9]/a").get()
+        print("next_pages: " + str(next_pages))
+
+        pass

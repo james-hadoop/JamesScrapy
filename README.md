@@ -35,7 +35,7 @@ CREATE TABLE `jianshu_article` (
   KEY `index_pub_time` (`pub_time`)
 ) DEFAULT CHARSET=utf8 COMMENT='james__简书爬虫数据';
 
-CREATE TABLE `yqc_shenzhen` (
+CREATE TABLE `yqc_spider` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL comment '标题',
   `url` varchar(255) DEFAULT NULL comment '标题',
@@ -45,10 +45,14 @@ CREATE TABLE `yqc_shenzhen` (
   `index_id` varchar(100) DEFAULT NULL comment '索引号',
   `key_cnt` int(11) default 0 comment '关键字匹配数',
   `cont` longtext DEFAULT NULL comment '内容',
+  `region` varchar(30) default null comment '地区',
+  `update_time` datetime not null comment '更新时间',
   KEY `index_id` (`id`),
   KEY `index_title` (`title`),
   KEY `index_pub_org` (`pub_org`),
-  KEY `index_pub_time` (`pub_time`)
-) DEFAULT CHARSET=utf8 COMMENT='james__yqc_shenzhen爬虫数据';
+  KEY `index_pub_time` (`pub_time`),
+  KEY `index_region` (`region`),
+  KEY `index_update_time` (`update_time`)
+) DEFAULT CHARSET=utf8 COMMENT='james__yqc_爬虫数据';
 
 
