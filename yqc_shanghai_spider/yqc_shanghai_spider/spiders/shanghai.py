@@ -55,6 +55,7 @@ keys = ['创新',
 
 count = 1
 
+
 class ShanghaiSpider(CrawlSpider):
     name = 'shanghai'
     allowed_domains = ['shanghai.gov.cn']
@@ -69,19 +70,18 @@ class ShanghaiSpider(CrawlSpider):
     cont_dict = {}
 
     def parse_item(self, response):
-        print
-
-        title = response.xpath("//*[@id='ivs_content']/p[5]/strong/span/span/text()").get()
-        cont = response.xpath("//div[@id='ivs_content']/text()").get()
+        print(">>> parse_item(): " + response.url)
+        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/dl/dd/text()").get()
+        cont = response.xpath("//*[@id='ivs_content']").get()
         index_id = str('_NULL')
-        pub_org = str('_NULL')
-        pub_time = response.xpath("//div[@id='ivs_date']/text()").get()
-        doc_id = str('_NULL')
+        pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[2]/dd/text()").get()
+        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[1]/dd/text()").get()
         region = str('上海')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         print(title)
-        print(cont)
+        self.log(cont, level=logging.INFO)
 
         if not title:
             return
@@ -92,8 +92,6 @@ class ShanghaiSpider(CrawlSpider):
                                   re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
 
         item = YqcShanghaiSpiderItem(cont_dict=self.cont_dict)
-        print('>>>>')
-        print(self.cont_dict)
 
         return item
 
@@ -108,8 +106,10 @@ class ShanghaiSpider(CrawlSpider):
             self.cont_dict[title] = cnt_dict
 
     def parse_page(self, response):
+        url_prefix = 'http://service.shanghai.gov.cn/xingzhengwendangku/'
+
         global count
-        print(">>> parse_page(): "+str(count))
+        print(">>> parse_page(): " + str(count))
         count += 1
 
         self.log("====| %s |" % response.url, level=logging.INFO)
@@ -120,9 +120,7 @@ class ShanghaiSpider(CrawlSpider):
         for tr in tr_list:
             # print(tr)
             url = tr.xpath("./td[1]/a/@href").get()
-            print("\t" + str(url))
+            full_url = url_prefix + url
+            print("\t" + str(full_url))
 
-        next_pages = response.xpath("//*[@id='main']/div[1]/div/div[2]/nav/ul/li[9]/a").get()
-        print("next_pages: " + str(next_pages))
-
-        pass
+            yield scrapy.Request(full_url, callback=self.parse_item)
