@@ -55,4 +55,6 @@ CREATE TABLE `yqc_spider` (
   KEY `index_update_time` (`update_time`)
 ) DEFAULT CHARSET=utf8 COMMENT='james__yqc_爬虫数据';
 
+select title,url,pub_time,pub_org,doc_id,index_id,key_cnt,region,update_time from yqc_spider order by key_cnt desc,update_time asc;
+
 
