@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import datetime
+import logging
+
+import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
@@ -53,37 +57,69 @@ keys = ['创新',
 class HangzhouSpider(CrawlSpider):
     name = 'hangzhou'
     allowed_domains = ['hangzhou.gov.cn']
-    start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/']
+    start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*www.hangzhou.gov.cn/art/2019.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*http://www.hangzhou.gov.cn/.*'),
+             callback='parse_page',
+             follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        title = response.xpath("//td[@class='title']/text()").get()
-        cont = response.xpath("//tr[@class='tr_main_value_odd']").get()
-        index_id = response.xpath("//body/div[3]/table[2]/tr[1]/td[2]/text()").get()
-        pub_org = response.xpath("//body/div[3]/table[2]/tr[3]/td[2]/text()").get()
-        pub_time = response.xpath("//body/div[3]/table[2]/tr[2]/td[4]/text()").get()
-        doc_id = response.xpath("//body/div[3]/table[2]/tr[2]/td[2]/text()").get()
+        print(">>> parse_item(): " + response.url)
+        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/dl/dd/text()").get()
+        cont = response.xpath("//*[@id='ivs_content']").get()
+        index_id = str('_NULL')
+        pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[2]/dd/text()").get()
+        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[1]/dd/text()").get()
+        region = str('上海')
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        print(title)
+        self.log(cont, level=logging.INFO)
+
+        if not title:
+            return
 
         for key in keys:
             if key in title:
-                self.dict_add_one(title, response.url, re.sub('[\s+]', ' ', cont), pub_time, pub_org, index_id, doc_id)
+                self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
+                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
 
         item = YqcHangzhouSpiderItem(cont_dict=self.cont_dict)
-        print('>>>>')
-        print(self.cont_dict)
 
         return item
 
-    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id):
+    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
         else:
             cnt_dict = {'key_cnt': 1, 'title': title, 'url': url, 'cont': cont, 'pub_time': pub_time,
-                        'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id}
+                        'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id, 'region': region,
+                        'update_time': update_time}
 
             self.cont_dict[title] = cnt_dict
+
+    def parse_page(self, response):
+        print(">>> parse_page()")
+        url_prefix = 'http://www.hangzhou.gov.cn/art/'
+
+        global count
+        print(">>> parse_page(): " + str(count))
+        count += 1
+
+        self.log("====| %s |" % response.url, level=logging.INFO)
+
+        tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
+        # print(tr_list)
+
+        for tr in tr_list:
+            # print(tr)
+            url = tr.xpath("./td[1]/a/@href").get()
+            full_url = url_prefix + url
+            print("\t" + str(full_url))
+
+            yield scrapy.Request(full_url, callback=self.parse_item)
