@@ -29,7 +29,7 @@ class YqcSuzhouSpiderPipeline(object):
     def sql(self):
         if not self._sql:
             self._sql = """
-               insert into yqc_suzhou(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s)
+               insert into yqc_spider(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, region, update_time, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                """
             return self._sql
         return self._sql
@@ -45,7 +45,7 @@ class YqcSuzhouSpiderPipeline(object):
             if v['title'] not in self.titleSet:
                 cursor.execute(self.sql, (
                     v['title'], v['url'], v['pub_time'], v['pub_org'], v['doc_id'], v['index_id'],
-                    v['key_cnt'], v['cont']))
+                    v['key_cnt'], v['region'], v['update_time'], v['cont']))
 
                 self.titleSet.add(v['title'])
 

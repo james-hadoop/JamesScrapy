@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import datetime
 
 import scrapy
 from scrapy.linkextractors import LinkExtractor
@@ -71,6 +72,8 @@ class SuzhouSpider(CrawlSpider):
         pub_org = response.xpath("//div[@class='con2 clearfix']/h4/text()").get()
         pub_time = response.xpath("//div[@class='con2 clearfix']/h4/text()").get()
         doc_id = "_NULL"
+        region = str('苏州')
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         print(str(">>> ") + str(title) + str(pub_time))
 
@@ -82,7 +85,8 @@ class SuzhouSpider(CrawlSpider):
 
         for key in keys:
             if key in title:
-                self.dict_add_one(title, response.url, re.sub('[\s+]', ' ', cont), pub_time, pub_org, index_id, doc_id)
+                self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
+                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
 
         item = YqcSuzhouSpiderItem(cont_dict=self.cont_dict)
 
@@ -93,11 +97,12 @@ class SuzhouSpider(CrawlSpider):
 
         return item
 
-    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id):
+    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
         else:
             cnt_dict = {'key_cnt': 1, 'title': title, 'url': url, 'cont': cont, 'pub_time': pub_time,
-                        'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id}
+                        'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id, 'region': region,
+                        'update_time': update_time}
 
             self.cont_dict[title] = cnt_dict
