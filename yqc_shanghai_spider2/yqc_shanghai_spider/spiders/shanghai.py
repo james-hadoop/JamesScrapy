@@ -63,7 +63,7 @@ class ShanghaiSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=r'.*nw2319/nw12344.*'),
-             callback='parse_page',
+             callback='parse_item',
              follow=False),
     )
 
@@ -81,15 +81,18 @@ class ShanghaiSpider(CrawlSpider):
         update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         print(title)
-        self.log(cont, level=logging.INFO)
+        try:
+            pub_time = re.sub('[\s+]', ' ', pub_time)
+        except:
+            pub_time = '--'
 
         if not title:
             return
 
         for key in keys:
             if key in title:
-                self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+                self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, ' ',
+                                  pub_time, pub_org, index_id, doc_id, region, update_time)
 
         item = YqcShanghaiSpiderItem(cont_dict=self.cont_dict)
 
@@ -114,7 +117,7 @@ class ShanghaiSpider(CrawlSpider):
 
         self.log("====| %s |" % response.url, level=logging.INFO)
         if 'index' in response.url:
-            yield scrapy.Request(response.url, callback=self.parse_item)
+            yield scrapy.Request(response.url, callback=self.parse_page)
 
         # tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
         tr_list = response.xpath("//*[@id='pageList']/ul/li")
