@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logging
+import uuid
 
 import scrapy
 import re
@@ -71,16 +72,19 @@ class ShanghaiSpider(CrawlSpider):
 
     def parse_item(self, response):
         print(">>> parse_item(): " + response.url)
-        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/dl/dd/text()").get()
+        # title = response.xpath("//*[@id='main']/div[1]/div/div[1]/dl/dd/text()").get()
+        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl/dd/text()").get()
         cont = response.xpath("//*[@id='ivs_content']").get()
         index_id = str('_NULL')
-        pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
-        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[2]/dd/text()").get()
-        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[1]/dd/text()").get()
+        pub_org = "NULL"
+        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[3]/dl[1]/dd/text()").get()
+        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
         region = str('上海')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         print(title)
+        print(">>> parse_item()")
+        self.log("====| %s |" % response.url, level=logging.INFO)
         self.log(cont, level=logging.INFO)
 
         if not title:
