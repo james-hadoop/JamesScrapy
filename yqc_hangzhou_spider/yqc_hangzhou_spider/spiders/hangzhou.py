@@ -60,7 +60,7 @@ class HangzhouSpider(CrawlSpider):
     start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*http://www.hangzhou.gov.cn/.*'),
+        Rule(LinkExtractor(allow=r'.*hangzhou.gov.cn/.*'),
              callback='parse_page',
              follow=False),
     )

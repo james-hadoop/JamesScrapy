@@ -79,12 +79,14 @@ class ShanghaiSpider(CrawlSpider):
         cont = response.xpath("//*[@id='ivs_content']").get()
         index_id = str('_NULL')
         pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+
         pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[3]/dl[1]/dd/text()").get()
         doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
         region = str('上海')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
         print(title)
+
         # self.log(cont, level=logging.INFO)
 
         if not title:
