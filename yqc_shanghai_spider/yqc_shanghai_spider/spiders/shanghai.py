@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-import logging
+import time
 
 import scrapy
 import re
@@ -26,7 +26,7 @@ keys = ['创新',
         '管理',
         '推动',
         '激发',
-        '实施方案',
+        '实施',
         '推广',
         '产业',
         '推进',
@@ -51,7 +51,8 @@ keys = ['创新',
         '引导基金',
         '资助',
         '降低',
-        '深化']
+        '深化',
+        '科技']
 
 count = 1
 
@@ -59,7 +60,9 @@ count = 1
 class ShanghaiSpider(CrawlSpider):
     name = 'shanghai'
     allowed_domains = ['shanghai.gov.cn']
-    start_urls = ['http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx']
+    # start_urls = ['http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx']
+    start_urls = [
+        'http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx?testpara=0&kw=&issueDate_userprop8=&status=0&departid=&wenhao=&issueDate_userprop8_end=&excuteDate=&excuteDate_end=&closeDate=&closeDate_end=&departtypename=&typename=&zhutitypename=&zhuti=&currentPage=1&pagesize=10']
 
     rules = (
         Rule(LinkExtractor(allow=r'.*xingzhengwendangku.*'),
@@ -70,18 +73,19 @@ class ShanghaiSpider(CrawlSpider):
     cont_dict = {}
 
     def parse_item(self, response):
-        print(">>> parse_item(): " + response.url)
-        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/dl/dd/text()").get()
+        print("5. parse_item(): " + time.strftime('%Y-%m-%d %H:%M:%S',
+                                                  time.localtime()) + "\n" + response.url)
+        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl/dd/text()").get()
         cont = response.xpath("//*[@id='ivs_content']").get()
         index_id = str('_NULL')
         pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
-        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[2]/dd/text()").get()
-        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[1]/dd/text()").get()
+        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[3]/dl[1]/dd/text()").get()
+        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
         region = str('上海')
-        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
         print(title)
-        self.log(cont, level=logging.INFO)
+        # self.log(cont, level=logging.INFO)
 
         if not title:
             return
@@ -109,18 +113,18 @@ class ShanghaiSpider(CrawlSpider):
         url_prefix = 'http://service.shanghai.gov.cn/xingzhengwendangku/'
 
         global count
-        print(">>> parse_page(): " + str(count))
         count += 1
 
-        self.log("====| %s |" % response.url, level=logging.INFO)
-
         tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
-        # print(tr_list)
+        # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) +tr_list)
 
         for tr in tr_list:
             # print(tr)
             url = tr.xpath("./td[1]/a/@href").get()
             full_url = url_prefix + url
-            print("\t" + str(full_url))
+            print("4. parse_page(): " + time.strftime('%Y-%m-%d %H:%M:%S',
+                                                      time.localtime()) + "\n" + response.url + "\n\t" + full_url)
 
             yield scrapy.Request(full_url, callback=self.parse_item)
+
+    # def process_spider_input(self, response):

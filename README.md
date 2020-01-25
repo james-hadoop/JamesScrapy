@@ -1,11 +1,15 @@
-### start.py
+## Reference:
+https://docs.scrapy.org/en/latest/topics/architecture.html
+
+
+## start.py
 # encoding: utf-8
 
 from scrapy import cmdline
 
-cmdline.execute("scrapy crawl bmw5".split())
+cmdline.execute("scrapy crawl shanghai".split())
 
-### User-Agent
+## User-Agent
 DEFAULT_REQUEST_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Language': 'en',
@@ -13,12 +17,12 @@ DEFAULT_REQUEST_HEADERS = {
 }
 
 
-### web driver
+## web driver
 https://github.com/mozilla/geckodriver/releases/tag/v0.26.0
 https://sites.google.com/a/chromium.org/chromedriver/downloads
 https://webkit.org/downloads/
 
-### mysql table
+## mysql table
 drop table jianshu_article;
 
 CREATE TABLE `jianshu_article` (
@@ -39,7 +43,7 @@ CREATE TABLE `yqc_spider` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL comment '标题',
   `url` varchar(255) DEFAULT NULL comment '标题',
-  `pub_time` datetime DEFAULT NULL comment '发布时间',
+  `pub_time` varchar(20) DEFAULT NULL comment '发布时间',
   `pub_org` varchar(50) DEFAULT NULL comment '发布机构',
   `doc_id` varchar(100) DEFAULT NULL comment '文号',
   `index_id` varchar(100) DEFAULT NULL comment '索引号',
@@ -55,6 +59,8 @@ CREATE TABLE `yqc_spider` (
   KEY `index_update_time` (`update_time`)
 ) DEFAULT CHARSET=utf8 COMMENT='james__yqc_爬虫数据';
 
+## Query Result from Mysql Table
+```
 SELECT *
 FROM
   (SELECT *
@@ -65,7 +71,7 @@ FROM
              min(pub_org) pub_org,
              min(doc_id) doc_id,
              min(index_id) index_id,
-             min(key_cnt) key_cnt,
+             min(key_cnt) key_cnt,  
              min(region),
              min(update_time) update_time
       FROM developer.yqc_spider_shanghai
@@ -103,4 +109,5 @@ FROM
    WHERE update_time>'2019-12-22 00:00:00') tt
 ORDER BY key_cnt,
          pub_time DESC;
+```         
 
