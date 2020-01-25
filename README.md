@@ -3,11 +3,13 @@ https://docs.scrapy.org/en/latest/topics/architecture.html
 
 
 ## start.py
+```
 # encoding: utf-8
 
 from scrapy import cmdline
 
 cmdline.execute("scrapy crawl shanghai".split())
+```
 
 ## User-Agent
 DEFAULT_REQUEST_HEADERS = {
@@ -23,6 +25,7 @@ https://sites.google.com/a/chromium.org/chromedriver/downloads
 https://webkit.org/downloads/
 
 ## mysql table
+```
 drop table jianshu_article;
 
 CREATE TABLE `jianshu_article` (
@@ -58,6 +61,7 @@ CREATE TABLE `yqc_spider` (
   KEY `index_region` (`region`),
   KEY `index_update_time` (`update_time`)
 ) DEFAULT CHARSET=utf8 COMMENT='james__yqc_爬虫数据';
+```
 
 ## Query Result from Mysql Table
 ```
@@ -109,5 +113,4 @@ FROM
    WHERE update_time>'2019-12-22 00:00:00') tt
 ORDER BY key_cnt,
          pub_time DESC;
-```         
-
+```
