@@ -2,6 +2,41 @@
 https://docs.scrapy.org/en/latest/topics/architecture.html
 
 
+## Project Generator
+```
+
+scrapy startproject yqc_ningbo_spider && \
+cd yqc_ningbo_spider && \
+scrapy genspider -t crawl ningbo "ningbo.gov.cn" && \
+cd ..
+
+
+scrapy startproject yqc_qingdao_spider && \
+cd yqc_qingdao_spider && \
+scrapy genspider -t crawl qingdao "qingdao.gov.cn" && \
+cd ..
+
+
+scrapy startproject yqc_chongqing_spider && \
+cd yqc_chongqing_spider && \
+scrapy genspider -t crawl chongqing "chongqing.gov.cn" && \
+cd ..
+
+
+scrapy startproject yqc_haikou_spider && \
+cd yqc_haikou_spider && \
+scrapy genspider -t crawl haikou "haikou.gov.cn" && \
+cd ..
+
+
+scrapy startproject yqc_xiamen_spider && \
+cd yqc_xiamen_spider && \
+scrapy genspider -t crawl xiamen "xiamen.gov.cn" && \
+cd ..
+
+```
+
+
 ## start.py
 ```
 # encoding: utf-8
