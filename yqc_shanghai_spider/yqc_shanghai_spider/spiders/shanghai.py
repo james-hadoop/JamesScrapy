@@ -60,9 +60,9 @@ count = 1
 class ShanghaiSpider(CrawlSpider):
     name = 'shanghai'
     allowed_domains = ['shanghai.gov.cn']
-    start_urls = ['http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx']
-    # start_urls = [
-    #     'http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx?testpara=0&kw=&issueDate_userprop8=&status=0&departid=&wenhao=&issueDate_userprop8_end=&excuteDate=&excuteDate_end=&closeDate=&closeDate_end=&departtypename=&typename=&zhutitypename=&zhuti=&currentPage=1&pagesize=10']
+    # start_urls = ['http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx']
+    start_urls = [
+        'http://service.shanghai.gov.cn/xingzhengwendangku/XZGFList.aspx?testpara=0&kw=&issueDate_userprop8=&status=0&departid=&wenhao=&issueDate_userprop8_end=&excuteDate=&excuteDate_end=&closeDate=&closeDate_end=&departtypename=&typename=&zhutitypename=&zhuti=&currentPage=1&pagesize=10']
 
     rules = (
         Rule(LinkExtractor(allow=r'.*xingzhengwendangku.*'),
@@ -74,7 +74,7 @@ class ShanghaiSpider(CrawlSpider):
 
     def parse_item(self, response):
         print("5. parse_item(): " + datetime.datetime.now().strftime(
-            '%Y-%m-%d %H:%M:%S.%f') + "\n" + response.url)
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
         title = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl/dd/text()").get()
         cont = response.xpath("//*[@id='ivs_content']").get()
         index_id = str('_NULL')
@@ -102,7 +102,7 @@ class ShanghaiSpider(CrawlSpider):
         return item
 
     def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
-        time.sleep(0.5)
+        time.sleep(0.3)
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
         else:
@@ -113,23 +113,57 @@ class ShanghaiSpider(CrawlSpider):
             self.cont_dict[title] = cnt_dict
 
     def parse_page(self, response):
-        # return
+        url = response.url
+
+        print("4. parse_page(): " + datetime.datetime.now().strftime(
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
 
         url_prefix = 'http://service.shanghai.gov.cn/xingzhengwendangku/'
 
-        global count
-        count += 1
+        if str('REPORT_NDOC_006051') in url or str('REPORT_NDOC_006010') in url:
+            print("\t>>> debug: " + url)
 
-        tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
-        # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) +tr_list)
+        if str('currentPage') in url:
+            tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
 
-        for tr in tr_list:
-            # print(tr)
-            url = tr.xpath("./td[1]/a/@href").get()
-            full_url = url_prefix + url
-            print("4. parse_page(): " + datetime.datetime.now().strftime(
-                '%Y-%m-%d %H:%M:%S.%f') + "\n" + response.url + "\n\t" + full_url)
+            for tr in tr_list:
+                # print(tr)
+                url = tr.xpath("./td[1]/a/@href").get()
+                full_url = url_prefix + url
 
-            yield scrapy.Request(full_url, callback=self.parse_item)
-        yield scrapy.Request(response.url, callback=self.parse_item)
-    # def process_spider_input(self, response):
+                yield scrapy.Request(full_url, callback=self.parse_item)
+
+        else:
+            if str('REPORT_NDOC_006051') in url or str('REPORT_NDOC_006010') in url:
+                print('\t>>> no currentPage')
+
+            title = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl/dd/text()").get()
+            cont = response.xpath("//*[@id='ivs_content']").get()
+            index_id = str('_NULL')
+            pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+
+            pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[3]/dl[1]/dd/text()").get()
+            doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+            region = str('上海')
+            update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
+
+            print("\t" + title)
+
+            # self.log(cont, level=logging.INFO)
+
+            if not title:
+                return
+
+            for key in keys:
+                if key in title:
+                    self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
+                                      re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+
+            item = YqcShanghaiSpiderItem(cont_dict=self.cont_dict)
+
+            print("6. parse_page(): " + datetime.datetime.now().strftime(
+                '%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
+
+            return item
+
+            # yield scrapy.Request(url, callback=self.parse_item)
