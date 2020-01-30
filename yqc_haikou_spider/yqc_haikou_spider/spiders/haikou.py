@@ -96,7 +96,7 @@ class HaikouSpider(CrawlSpider):
 
         item = YqcHaikouSpiderItem(cont_dict=self.cont_dict)
 
-        return item
+        yield item
 
     def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
         time.sleep(0.3)
@@ -158,4 +158,4 @@ class HaikouSpider(CrawlSpider):
             print("6. parse_page(): " + datetime.datetime.now().strftime(
                 '%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
 
-            return item
+            yield item

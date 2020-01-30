@@ -38,7 +38,7 @@ class JsSpider(CrawlSpider):
         print(read_count)
 
         if not read_count:
-            read_count=str("_NULL")
+            read_count = str("_NULL")
 
         item = ArticleItem(
             title=title,

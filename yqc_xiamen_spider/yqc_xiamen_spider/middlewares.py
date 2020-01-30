@@ -69,8 +69,8 @@ class YqcXiamenSpiderSpiderMiddleware(object):
 
 class YqcXiamenSpiderDownloaderMiddleware(object):
     def __init__(self):
-        self.driver = webdriver.Chrome(executable_path=r"/home/james/_AllDocMap/06_Software/chromedriver")
-        # self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
+        # self.driver = webdriver.Chrome(executable_path=r"/home/james/_AllDocMap/06_Software/chromedriver")
+        self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
 
     def process_request(self, request, spider):
         return None

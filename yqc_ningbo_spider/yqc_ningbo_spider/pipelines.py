@@ -37,7 +37,6 @@ class YqcNingboSpiderPipeline(object):
     def process_item(self, item, spider):
         print("7. process_item()...")
 
-        time.sleep(0.3)
         defer = self.dbpool.runInteraction(self.insert_item, item)
 
         defer.addErrback(self.handle_error, item, spider)

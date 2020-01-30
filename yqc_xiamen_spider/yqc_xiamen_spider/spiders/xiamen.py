@@ -134,7 +134,9 @@ class XiamenSpider(CrawlSpider):
             index_id = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[1]/td[4]/text()").get()
             pub_org = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[2]/td[2]/text()").get()
 
-            pub_time = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[2]/td[4]/text()").get()
+            pub_time = response.xpath("//*[@class='xl_tit1_l']/text()").get()
+            
+            
             doc_id = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[1]/td[2]/text()").get()
             region = str('厦门')
             update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
