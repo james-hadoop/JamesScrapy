@@ -28,12 +28,13 @@ class YqcHangzhouSpiderPipeline(object):
     def sql(self):
         if not self._sql:
             self._sql = """
-               insert into yqc_spider(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, region, update_time, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+               insert into yqc_spider_hangzhou(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, region, update_time, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                """
             return self._sql
         return self._sql
 
     def process_item(self, item, spider):
+        print("7. process_item()...")
         defer = self.dbpool.runInteraction(self.insert_item, item)
         defer.addErrback(self.handle_error, item, spider)
 

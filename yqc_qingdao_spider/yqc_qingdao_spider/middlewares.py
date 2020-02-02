@@ -73,7 +73,14 @@ class YqcQingdaoSpiderDownloaderMiddleware(object):
         self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
 
     def process_request(self, request, spider):
-        return None
+        url = request.url
+        print(
+            "1. process_request(): " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
+        self.driver.get(url)
+        source = self.driver.page_source
+        response = HtmlResponse(url=self.driver.current_url, body=source, request=request, encoding="utf-8")
+
+        return response
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.

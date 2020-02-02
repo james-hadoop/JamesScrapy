@@ -64,7 +64,7 @@ class QingdaoSpider(CrawlSpider):
     start_urls = ['http://zct.qingdao.gov.cn/web/pages/home.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*xingzhengwendangku.*'),
+        Rule(LinkExtractor(allow=r'.*pages.*'),
              callback='parse_page',
              follow=False),
     )
@@ -74,13 +74,12 @@ class QingdaoSpider(CrawlSpider):
     def parse_item(self, response):
         print("5. parse_item(): " + datetime.datetime.now().strftime(
             '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
-        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl/dd/text()").get()
-        cont = response.xpath("//*[@id='ivs_content']").get()
+        title = response.xpath("//*[@class='new-title']/text()").get()
+        cont = response.xpath("//*[@id='news-detail']").get()
         index_id = str('_NULL')
-        pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
-
-        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[3]/dl[1]/dd/text()").get()
-        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+        pub_org = response.xpath("//*[@id='news-detail']/div[1]/div/span[3]/text()").get()
+        pub_time = response.xpath("//*[@id='news-detail']/div[1]/div/span[1]/text()").get()
+        doc_id = str('_NULL')
         region = str('青岛')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
@@ -119,9 +118,6 @@ class QingdaoSpider(CrawlSpider):
 
         url_prefix = 'http://service.qingdao.gov.cn/xingzhengwendangku/'
 
-        if str('REPORT_NDOC_006051') in url or str('REPORT_NDOC_006010') in url:
-            print("\t>>> debug: " + url)
-
         if str('currentPage') in url:
             tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
 
@@ -133,16 +129,13 @@ class QingdaoSpider(CrawlSpider):
                 yield scrapy.Request(full_url, callback=self.parse_item)
 
         else:
-            if str('REPORT_NDOC_006051') in url or str('REPORT_NDOC_006010') in url:
-                print('\t>>> no currentPage')
 
-            title = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl/dd/text()").get()
-            cont = response.xpath("//*[@id='ivs_content']").get()
+            title = response.xpath("//*[@class='new-title']/text()").get()
+            cont = response.xpath("//*[@id='news-detail']").get()
             index_id = str('_NULL')
-            pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
-
-            pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[3]/dl[1]/dd/text()").get()
-            doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
+            pub_org = response.xpath("//*[@id='news-detail']/div[1]/div/span[3]/text()").get()
+            pub_time = response.xpath("//*[@id='news-detail']/div[1]/div/span[1]/text()").get()
+            doc_id = str('_NULL')
             region = str('青岛')
             update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 

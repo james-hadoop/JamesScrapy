@@ -6,7 +6,7 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from selenium import webdriver
-import time
+import datetime
 from scrapy.http.response.html import HtmlResponse
 
 
@@ -16,29 +16,18 @@ class YqcHangzhouSpiderDownloaderMiddleware(object):
         self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
 
     def process_request(self, request, spider):
-        print(">>> process_request(): " + str(request.url))
-        self.driver.get(request.url)
+        url = request.url
+        print(
+            "1. process_request(): " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
+        self.driver.get(url)
+        source = self.driver.page_source
 
-        # last_page = self.driver.find_element_by_xpath("//li[@class='hidden-xs pagination_index_last']")
+        print("3. finish process_request(): " + datetime.datetime.now().strftime(
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
+        response = HtmlResponse(url=url, body=source, request=request, encoding="utf-8")
+        return response
 
-        next_page = None
-        try:
-            next_page = self.driver.find_element_by_xpath(
-                "//*[@class='btn_page']/text()")
+        # a_list=self.driver.find_elements_by_xpath("//*[@id='div1345230']/table/tbody/tr/td/table[2]/tbody/tr/td[2]/a")
+        # for a in a_list:
+        #     url = a.xpath("./a/@href").get()
 
-            # // *[ @ id = "currpage"]
-            # //*[@id="div1345230"]/table/tbody/tr/td/table[2]/tbody/tr/td[3]/table/tbody/tr/td[4]/input
-        except:
-            pass
-
-        if next_page is not None:
-            print("=>| %s |" % next_page.text)
-            url = str(next_page.find_element_by_xpath("./a").get_attribute('href'))
-            print("=>| %s |" % str(next_page.find_element_by_xpath("./a").get_attribute('href')))
-
-            time.sleep(2)
-
-            source = self.driver.page_source
-            response = HtmlResponse(url=url, body=source, request=request, encoding="utf-8")
-
-            return response

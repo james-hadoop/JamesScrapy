@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-import logging
+import time
 
 import scrapy
 import re
@@ -26,7 +26,7 @@ keys = ['创新',
         '管理',
         '推动',
         '激发',
-        '实施方案',
+        '实施',
         '推广',
         '产业',
         '推进',
@@ -51,7 +51,8 @@ keys = ['创新',
         '引导基金',
         '资助',
         '降低',
-        '深化']
+        '深化',
+        '科技']
 
 
 class HangzhouSpider(CrawlSpider):
@@ -60,26 +61,26 @@ class HangzhouSpider(CrawlSpider):
     start_urls = ['http://www.hangzhou.gov.cn/col/col1346101/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*hangzhou.gov.cn/.*'),
-             callback='parse_page',
+        Rule(LinkExtractor(allow=r'.*hangzhou.gov.cn/art.*'),
+             callback='parse_item',
              follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        print(">>> parse_item(): " + response.url)
-        title = response.xpath("//*[@id='main']/div[1]/div/div[1]/dl/dd/text()").get()
-        cont = response.xpath("//*[@id='ivs_content']").get()
+        print("5. parse_item(): " + datetime.datetime.now().strftime(
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
+        title = response.xpath("//tr[@class='tr_main_value_even']/td[1]/a/title/text()").get()
+        cont = response.xpath("_NULL").get()
         index_id = str('_NULL')
-        pub_org = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[2]/dl[1]/dd/text()").get()
-        pub_time = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[2]/dd/text()").get()
-        doc_id = response.xpath("//*[@id='main']/div[1]/div/div[1]/div[1]/dl[1]/dd/text()").get()
-        region = str('上海')
-        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        pub_org = response.xpath("//tr[@class='tr_main_value_even']/td[2]/text()").get()
+        pub_time = response.xpath("//tr[@class='tr_main_value_even']/td[3]/text()").get()
+        doc_id = response.xpath('_NULL')
+        region = str('杭州')
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
-        print(title)
-        self.log(cont, level=logging.INFO)
+        print("\t" + title)
 
         if not title:
             return
@@ -94,6 +95,7 @@ class HangzhouSpider(CrawlSpider):
         return item
 
     def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
+        time.sleep(0.3)
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
         else:
@@ -104,16 +106,17 @@ class HangzhouSpider(CrawlSpider):
             self.cont_dict[title] = cnt_dict
 
     def parse_page(self, response):
-        print(">>> parse_page()")
-        url_prefix = 'http://www.hangzhou.gov.cn/art/'
+        url = response.url
+
+        print("4. parse_page(): " + datetime.datetime.now().strftime(
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
+        url_prefix = 'http://www.hangzhou.gov.cn/col/'
 
         global count
         print(">>> parse_page(): " + str(count))
         count += 1
 
-        self.log("====| %s |" % response.url, level=logging.INFO)
-
-        tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody//tr")
+        tr_list = response.xpath("//*[@id='main']/div[1]/div/div[2]/table/tbody/tr")
         # print(tr_list)
 
         for tr in tr_list:
