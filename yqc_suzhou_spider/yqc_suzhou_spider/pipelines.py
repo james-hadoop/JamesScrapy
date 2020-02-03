@@ -35,6 +35,8 @@ class YqcSuzhouSpiderPipeline(object):
         return self._sql
 
     def process_item(self, item, spider):
+        print("7. process_item()...")
+        
         defer = self.dbpool.runInteraction(self.insert_item, item)
         defer.addErrback(self.handle_error, item, spider)
 

@@ -27,7 +27,7 @@ class YqcShanghaiSpiderDownloaderMiddleware(object):
     def process_request(self, request, spider):
         if(self.count<0):
             return
-        self.count-=1
+        self.count += 1
         print(">>> process_request(): " + str(request.url))
         self.driver.get(request.url)
 

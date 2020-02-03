@@ -81,7 +81,7 @@ class ChongqingSpider(CrawlSpider):
         pub_org = response.xpath("/html/body/div[2]/div[2]/div/div/div/div[1]/span/span[1]/text()").get()
 
         pub_time = response.xpath("/html/body/div[2]/div[2]/div/div/div/div[1]/span/span[2]/text()").get()
-        doc_id = response.xpath("_NULL").get()
+        doc_id = str("_NULL")
         region = str('重庆')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
@@ -143,7 +143,7 @@ class ChongqingSpider(CrawlSpider):
             pub_org = response.xpath("/html/body/div[2]/div[2]/div/div/div/div[1]/span/span[1]/text()").get()
 
             pub_time = response.xpath("/html/body/div[2]/div[2]/div/div/div/div[1]/span/span[2]/text()").get()
-            doc_id = response.xpath("_NULL").get()
+            doc_id = str('_NULL')
             region = str('重庆')
             update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
