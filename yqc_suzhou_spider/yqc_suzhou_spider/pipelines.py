@@ -29,7 +29,7 @@ class YqcSuzhouSpiderPipeline(object):
     def sql(self):
         if not self._sql:
             self._sql = """
-               insert into yqc_spider(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, region, update_time, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+               insert into yqc_spider_suzhou(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, region, update_time, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                """
             return self._sql
         return self._sql

@@ -26,7 +26,7 @@ keys = ['创新',
         '管理',
         '推动',
         '激发',
-        '实施方案',
+        '实施',
         '推广',
         '产业',
         '推进',
@@ -51,51 +51,49 @@ keys = ['创新',
         '引导基金',
         '资助',
         '降低',
-        '深化']
+        '深化',
+        '科技']
 
 
 class SuzhouSpider(CrawlSpider):
     name = 'suzhou'
     allowed_domains = ['suzhou.gov.cn']
-    start_urls = ['http://www.suzhou.gov.cn/xxgk/zdgcjsxmssjz/sbj_11124/']
+    start_urls = [
+        'http://www.suzhou.gov.cn/szxxgk/front/xxgk_right.jsp?sitecode=szsrmzf&channel_id=dc1a3f5691e541108d5a18bdd028949b']
+    # start_urls = ['http://www.suzhou.gov.cn/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*suzhou.gov.cn/xxgk/zdgcjsxmssjz.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*zfwj/202002.*'), callback='parse_item', follow=False),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
-        title = response.xpath("//div[@class='con2 clearfix']/h1/text()").get()
-        cont = response.xpath("//div[@class='TRS_Editor']").get()
-        index_id = "_NULL"
-        pub_org = response.xpath("//div[@class='con2 clearfix']/h4/text()").get()
-        pub_time = response.xpath("//div[@class='con2 clearfix']/h4/text()").get()
-        doc_id = "_NULL"
+        print("5. parse_item(): " + datetime.datetime.now().strftime(
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
+        title = response.xpath("//table[@class='xxgk_content_info1']/tbody/tr[3]/td[2]/text()").get()
+        cont = response.xpath("//div[@class='content']").get()
+        index_id = response.xpath("//table[@class='xxgk_content_info1']/tbody/tr[1]/td[2]/text()").get()
+        pub_org = response.xpath("//table[@class='xxgk_content_info1']/tbody/tr[2]/td[2]/text()").get()
+        pub_time = response.xpath("//table[@class='xxgk_content_info1']/tbody/tr[2]/td[4]/text()").get()
+        doc_id = response.xpath("//table[@class='xxgk_content_info1']/tbody/tr[3]/td[4]/text()").get()
         region = str('苏州')
-        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        print(str(">>> ") + str(title) + str(pub_time))
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
         if not title:
             return
 
-        if not '2019' in pub_time:
-            return
-
+        print("\t>>> " + title)
         for key in keys:
             if key in title:
                 self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+                                  re.sub('[\s+]', ' ', pub_time), re.sub('[\s+]', ' ', pub_org),
+                                  re.sub('[\s+]', ' ', index_id), re.sub('[\s+]', ' ', doc_id),
+                                  region, update_time)
 
         item = YqcSuzhouSpiderItem(cont_dict=self.cont_dict)
 
-        # print('>>>>')
-        # print(index_id)
-        # print(self.cont_dict)
-        # print(self.cont_dict.__len__())
-
-        return item
+        yield item
 
     def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
         if title in self.cont_dict:
