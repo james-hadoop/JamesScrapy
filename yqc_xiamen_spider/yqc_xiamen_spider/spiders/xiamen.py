@@ -73,27 +73,25 @@ class XiamenSpider(CrawlSpider):
     def parse_item(self, response):
         print("5. parse_item(): " + datetime.datetime.now().strftime(
             '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
-        title = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[3]/td[2]/text()").get()
+        title = response.xpath("//table[@class='tab2']/tr[3]/td[2]/text()").get()
         cont = response.xpath("//*[@id='trsContent']").get()
-        index_id = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[1]/td[4]/text()").get()
-        pub_org = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[2]/td[2]/text()").get()
+        index_id = response.xpath("//table[@class='tab2']/tr[1]/td[4]/text()").get()
+        pub_org = response.xpath("//table[@class='tab2']/tr[2]/td[2]/text()").get()
 
-        pub_time = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[2]/td[4]/text()").get()
-        doc_id = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[1]/td[2]/text()").get()
+        pub_time = response.xpath("//table[@class='tab2']/tr[2]/td[4]/text()").get()
+        doc_id = response.xpath("//table[@class='tab2']/tr[1]/td[4]/text()").get()
         region = str('厦门')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
-        print("\t" + title)
-
-        # self.log(cont, level=logging.INFO)
-
-        if not title:
-            return
-
+        print("\t>>> " + title)
+        print("\t>>> " + pub_org)
+        print("\t>>> " + doc_id)
         for key in keys:
             if key in title:
                 self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+                                  re.sub('[\s+]', ' ', pub_time), re.sub('[\s+]', ' ', pub_org),
+                                  re.sub('[\s+]', ' ', index_id), re.sub('[\s+]', ' ', doc_id),
+                                  region, update_time)
 
         item = YqcXiamenSpiderItem(cont_dict=self.cont_dict)
 
@@ -129,22 +127,19 @@ class XiamenSpider(CrawlSpider):
                 yield scrapy.Request(full_url, callback=self.parse_item)
 
         else:
-            title = response.xpath("//*[@class='xl_tit']/text()").get()
+            title = response.xpath("//table[@class='tab2']/tr[3]/td[2]/text()").get()
             cont = response.xpath("//*[@id='trsContent']").get()
-            index_id = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[1]/td[4]/text()").get()
-            pub_org = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[2]/td[2]/text()").get()
+            index_id = response.xpath("//table[@class='tab2']/tr[1]/td[4]/text()").get()
+            pub_org = response.xpath("//table[@class='tab2']/tr[2]/td[2]/text()").get()
 
-            pub_time = response.xpath("//*[@class='xl_tit1_l']/text()").get()
-            
-            
-            doc_id = response.xpath("/html/body/div[1]/div[2]/div[2]/table/tbody/tr[1]/td[2]/text()").get()
+            pub_time = response.xpath("//table[@class='tab2']/tr[2]/td[4]/text()").get()
+            doc_id = response.xpath("//table[@class='tab2']/tr[1]/td[4]/text()").get()
             region = str('厦门')
             update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
-            if not title:
-                return
-
-            print("\t" + re.sub('[\s+]', ' ', title))
+            print("\t>>> " + title)
+            print("\t>>> " + pub_org)
+            print("\t>>> " + doc_id)
             for key in keys:
                 if key in title:
                     self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),

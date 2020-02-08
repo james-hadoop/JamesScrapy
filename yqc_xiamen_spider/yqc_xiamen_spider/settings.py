@@ -89,6 +89,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-LOG_FILE = "20200127.log"
+LOG_FILE = "console.log"
 
 LOG_LEVEL = "INFO"
