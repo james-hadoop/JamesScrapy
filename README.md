@@ -102,50 +102,26 @@ CREATE TABLE `yqc_spider` (
 ```
 SELECT *
 FROM
-  (SELECT *
+  (SELECT t_cont.*
    FROM
-     (SELECT min(title) title,
-             min(url) url,
-             min(pub_time) pub_time,
-             min(pub_org) pub_org,
-             min(doc_id) doc_id,
-             min(index_id) index_id,
-             min(key_cnt) key_cnt,  
-             min(region),
-             min(update_time) update_time
-      FROM developer.yqc_spider_shanghai
-      GROUP BY title,
-               url,
-               pub_time,
-               pub_org,
-               doc_id,
-               index_id,
-               key_cnt,
-               region,
-               update_time) t1
-   WHERE update_time>'2019-12-22 00:00:00'
-   UNION ALL SELECT *
-   FROM
-     (SELECT min(title) title,
-             min(url) url,
-             min(pub_time) pub_time,
-             min(pub_org) pub_org,
-             min(doc_id) doc_id,
-             min(index_id) index_id,
-             min(key_cnt) key_cnt,
-             min(region),
-             min(update_time) update_time
+     (SELECT min(id) id,
+             title
       FROM developer.yqc_spider
-      GROUP BY title,
-               url,
-               pub_time,
-               pub_org,
-               doc_id,
-               index_id,
-               key_cnt,
-               region,
-               update_time) t2
-   WHERE update_time>'2019-12-22 00:00:00') tt
-ORDER BY key_cnt,
-         pub_time DESC;
+      GROUP BY title) t_id
+   LEFT JOIN
+     (SELECT id,
+             title,
+             url,
+             pub_time,
+             pub_org,
+             doc_id,
+             index_id,
+             key_cnt,
+             region,
+             update_time
+      FROM developer.yqc_spider
+      WHERE update_time>'2020-02-13 00:00:00') t_cont ON t_id.id=t_cont.id) tt
+WHERE title IS NOT NULL
+ORDER BY region,
+         key_cnt DESC;
 ```

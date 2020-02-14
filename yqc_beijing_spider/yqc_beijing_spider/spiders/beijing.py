@@ -25,7 +25,7 @@ keys = ['创新',
         '管理',
         '推动',
         '激发',
-        '实施方案',
+        '实施',
         '推广',
         '产业',
         '推进',
@@ -50,7 +50,8 @@ keys = ['创新',
         '引导基金',
         '资助',
         '降低',
-        '深化']
+        '深化',
+        '科技']
 
 
 class BeijingSpider(CrawlSpider):
@@ -59,15 +60,17 @@ class BeijingSpider(CrawlSpider):
     start_urls = ['http://www.beijing.gov.cn/zhengce/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*beijing.gov.cn/zhengce/zhengcefagui/2019.*'), callback='parse_item',
+        Rule(LinkExtractor(allow=r'.*bzhengcefagui.*'), callback='parse_item',
              follow=True),
     )
 
     cont_dict = {}
 
     def parse_item(self, response):
+        print("5. parse_item(): " + datetime.datetime.now().strftime(
+            '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
         # title = response.xpath("//body/div[1]/div/h1/text()").get()
-        title = response.xpath("//div[@class='header']/p/text()").get()
+        title = response.xpath("//div[@class='header']/p/h1/text()").get()
         # cont = response.xpath("//div[@class='TRS_Editor']").get()
         cont = response.xpath("//div[@class='view TRS_UEDITOR trs_paper_default trs_web']/p").get()
         index_id = ''
@@ -78,12 +81,12 @@ class BeijingSpider(CrawlSpider):
         # doc_id = response.xpath("//div[@class='xx_con']/p[6]/text()").get()
         doc_id = response.xpath("//div[@class='container']/ol/li[6]/span").get()
         region = str('北京')
-        update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print('>>> ' + str(title))
+        update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
         if not title:
             return
 
+        print("\t>>> " + title)
         for key in keys:
             if key in title:
                 self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
