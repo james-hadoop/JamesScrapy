@@ -60,8 +60,8 @@ class BeijingSpider(CrawlSpider):
     start_urls = ['http://www.beijing.gov.cn/zhengce/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*bzhengcefagui.*'), callback='parse_item',
-             follow=True),
+        Rule(LinkExtractor(allow=r'.*zhengcefagui.*'), callback='parse_item',
+             follow=False),
     )
 
     cont_dict = {}
@@ -70,7 +70,7 @@ class BeijingSpider(CrawlSpider):
         print("5. parse_item(): " + datetime.datetime.now().strftime(
             '%Y-%m-%d %H:%M:%S.%f') + " -> " + response.url)
         # title = response.xpath("//body/div[1]/div/h1/text()").get()
-        title = response.xpath("//div[@class='header']/p/h1/text()").get()
+        title = response.xpath("//div[@class='header']/p/text()").get()
         # cont = response.xpath("//div[@class='TRS_Editor']").get()
         cont = response.xpath("//div[@class='view TRS_UEDITOR trs_paper_default trs_web']/p").get()
         index_id = ''

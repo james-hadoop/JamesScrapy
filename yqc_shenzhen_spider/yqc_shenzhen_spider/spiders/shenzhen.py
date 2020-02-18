@@ -58,10 +58,10 @@ keys = ['创新',
 class ShenzhenSpider(CrawlSpider):
     name = 'shenzhen'
     allowed_domains = ['sz.gov.cn']
-    start_urls = ['http://www.sz.gov.cn/']
+    start_urls = ['http://www.sz.gov.cn/cn/xxgk/zfxxgj/zfwj/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*zfgb.*'), callback='parse_item', follow=False),
+        Rule(LinkExtractor(allow=r'.*szfwj.*'), callback='parse_item', follow=True),
     )
 
     cont_dict = {}
