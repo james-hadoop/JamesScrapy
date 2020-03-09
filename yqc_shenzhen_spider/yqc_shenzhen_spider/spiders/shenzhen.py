@@ -61,7 +61,7 @@ class ShenzhenSpider(CrawlSpider):
     start_urls = ['http://www.sz.gov.cn/cn/xxgk/zfxxgj/zfwj/index.html']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*szfwj.*'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'.*szfwj.*'), callback='parse_item', follow=False),
     )
 
     cont_dict = {}
