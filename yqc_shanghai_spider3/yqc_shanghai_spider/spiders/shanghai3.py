@@ -66,7 +66,7 @@ class ShanghaiSpider(CrawlSpider):
     rules = (
         Rule(LinkExtractor(allow=r'.*nw48607.*'),
              callback='parse_item',
-             follow=True),
+             follow=False),
     )
 
     cont_dict = {}
