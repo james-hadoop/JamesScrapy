@@ -21,8 +21,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class YqcShanghaiSpiderDownloaderMiddleware(object):
     def __init__(self):
-        # self.driver = webdriver.Chrome(executable_path=r"/home/james/_AllDocMap/06_Software/chromedriver")
-        self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
+        self.driver = webdriver.Chrome(executable_path=r"/home/james/_AllDocMap/06_Software/chromedriver")
+        # self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
 
     def process_request(self, request, spider):
         url = request.url
