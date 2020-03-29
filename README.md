@@ -125,3 +125,19 @@ WHERE title IS NOT NULL
 ORDER BY region,
          key_cnt DESC;
 ```
+
+## run in terminal
+```
+cd workspace4py/JamesScrapy/yqc_beijing_spider
+
+cd ../yqc_beijing_spider/ && scrapy crawl beijing && \
+cd ../yqc_chongqing_spider/ && scrapy crawl chongqing && \
+cd ../yqc_haikou_spider/ && scrapy crawl haikou && \
+cd ../yqc_ningbo_spider/ && scrapy crawl ningbo && \
+cd ../yqc_shanghai_spider && scrapy crawl shanghai && \
+cd ../yqc_shanghai_spider2 && scrapy crawl shanghai && \
+cd ../yqc_shanghai_spider3 && scrapy crawl shanghai3 && \
+cd ../yqc_shenzhen_spider && scrapy crawl shenzhen && \
+cd ../yqc_xiamen_spider && scrapy crawl xiamen && \
+cd ../yqc_suzhou_spider && scrapy crawl suzhou
+```
