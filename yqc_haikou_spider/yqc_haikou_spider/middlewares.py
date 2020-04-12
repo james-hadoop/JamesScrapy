@@ -13,6 +13,7 @@ import datetime
 from scrapy.http.response.html import HtmlResponse
 import traceback
 import logging
+import os
 
 import scrapy
 from selenium.webdriver.common.by import By
@@ -69,8 +70,12 @@ class YqcHaikouSpiderSpiderMiddleware(object):
 
 class YqcHaikouSpiderDownloaderMiddleware(object):
     def __init__(self):
-        self.driver = webdriver.Chrome(executable_path=r"/home/james/_AllDocMap/06_Software/chromedriver")
-        # self.driver = webdriver.Chrome(executable_path=r"/Users/qjiang/install/chromedriver")
+        os_info = os.uname()
+        if os_info.sysname == 'Darwin':
+            chrome_path = r"/Users/qjiang/install/chromedriver"
+        else:
+            chrome_path = r"/home/james/_AllDocMap/06_Software/chromedriver"
+        self.driver = webdriver.Chrome(executable_path=chrome_path)
 
     def process_request(self, request, spider):
         return None
