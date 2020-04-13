@@ -12,8 +12,6 @@ cd yqc_shanghai_spider/ && scrapy crawl shanghai && cd ..
 
 cd yqc_shanghai_spider2/ && scrapy crawl shanghai && cd ..
 
-cd yqc_shanghai_spider3/ && scrapy crawl shanghai && cd ..
-
 cd yqc_shanghai_spider3/ && scrapy crawl shanghai3 && cd ..
 
 cd yqc_shenzhen_spider/ && scrapy crawl shenzhen && cd ..
