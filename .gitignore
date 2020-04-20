@@ -5,6 +5,7 @@
 # IDEA #
 */.idea/
 */*.iml
+.idea/
 
 # Eclipse #
 */.metadata/

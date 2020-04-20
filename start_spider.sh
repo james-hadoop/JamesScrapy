@@ -10,7 +10,7 @@ cd yqc_ningbo_spider/ && scrapy crawl ningbo && cd ..
 
 cd yqc_shanghai_spider/ && scrapy crawl shanghai && cd ..
 
-cd yqc_shanghai_spider2/ && scrapy crawl shanghai && cd ..
+cd yqc_shanghai_spider2/ && scrapy crawl shanghai2 && cd ..
 
 cd yqc_shanghai_spider3/ && scrapy crawl shanghai3 && cd ..
 

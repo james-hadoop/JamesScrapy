@@ -57,7 +57,7 @@ count = 1
 
 
 class ShanghaiSpider(CrawlSpider):
-    name = 'shanghai'
+    name = 'shanghai2'
     allowed_domains = ['shanghai.gov.cn']
     start_urls = ['http://www.shanghai.gov.cn/nw2/nw2314/nw2319/nw12344/index.html']
 
