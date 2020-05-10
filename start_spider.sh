@@ -4,8 +4,6 @@ cd yqc_chongqing_spider/ && scrapy crawl chongqing && cd ..
 
 cd yqc_haikou_spider/ && scrapy crawl haikou && cd ..
 
-cd yqc_haikou_spider/ && scrapy crawl haikou && cd ..
-
 cd yqc_ningbo_spider/ && scrapy crawl ningbo && cd ..
 
 cd yqc_shanghai_spider/ && scrapy crawl shanghai && cd ..
