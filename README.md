@@ -34,6 +34,58 @@ cd yqc_xiamen_spider && \
 scrapy genspider -t crawl xiamen "xiamen.gov.cn" && \
 cd ..
 
+scrapy startproject yqc_guangzhou_spider && \
+cd yqc_guangzhou_spider && \
+scrapy genspider -t crawl guangzhou "guangzhou.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_tianjin_spider && \
+cd yqc_tianjin_spider && \
+scrapy genspider -t crawl tianjin "tianjin.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_nanning_spider && \
+cd yqc_nanning_spider && \
+scrapy genspider -t crawl nanning "nanning.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_chengdu_spider && \
+cd yqc_chengdu_spider && \
+scrapy genspider -t crawl chengdu "chengdu.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_changsha_spider && \
+cd yqc_changsha_spider && \
+scrapy genspider -t crawl changsha "changsha.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_wuhan_spider && \
+cd yqc_wuhan_spider && \
+scrapy genspider -t crawl wuhan "wuhan.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_nanchang_spider && \
+cd yqc_nanchang_spider && \
+scrapy genspider -t crawl nanchang "nanchang.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_zhengzhou_spider && \
+cd yqc_zhengzhou_spider && \
+scrapy genspider -t crawl zhengzhou "zhengzhou.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_shijiazhuang_spider && \
+cd yqc_shijiazhuang_spider && \
+scrapy genspider -t crawl shijiazhuang "shijiazhuang.gov.cn" && \
+cd ..
+
+scrapy startproject yqc_harbin_spider && \
+cd yqc_harbin_spider && \
+scrapy genspider -t crawl harbin "harbin.gov.cn" && \
+cd ..
+
+
+
 ```
 
 
