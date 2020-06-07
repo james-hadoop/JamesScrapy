@@ -7,6 +7,8 @@ import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
+from yqc_shijiazhuang_spider.items import YqcShijiazhuangSpiderItem
+
 keys = ['创新',
         '创业',
         '改革',
@@ -56,13 +58,9 @@ keys = ['创新',
 count = 1
 
 
-class YqcShijiazhuangSpiderItem(object):
-    pass
-
-
 class ShijiazhuangSpider(CrawlSpider):
     name = 'shijiazhuang'
-    allowed_domains = ['shijiazhuang.gov.cn']
+    allowed_domains = ['sjz.gov.cn']
     start_urls = ['http://www.sjz.gov.cn/col/1490066673769/index.html']
 
     rules = (
@@ -137,13 +135,13 @@ class ShijiazhuangSpider(CrawlSpider):
             if str('REPORT_NDOC_006051') in url or str('REPORT_NDOC_006010') in url:
                 print('\t>>> no currentPage')
 
-            title = response.xpath("//*[@id='conN']/div/font/div/p[5]/span/text()").get()
+            title = response.xpath("//*[@id='showtitle_']").get()
             cont = response.xpath("//*[@id='conN']").get()
-            index_id = response.xpath("//*[@id='zoomcon']/p[1]/text()").get()
-            pub_org = response.xpath("//*[@id='conN']/div/font/div/p[6]/span/text()").get()
+            index_id = str('_NULL')
+            pub_org = str('_NULL')
 
-            pub_time = response.xpath("//*[@id='conN']/div/font/div/p[7]/span/text()").get()
-            doc_id = response.xpath("/html/body/div/div[2]/div[2]/div/div[1]/div[2]/text()").get()
+            pub_time = response.xpath("//*[@id='titN']/table/tbody/tr/td[1]/text()").get()
+            doc_id = str('_NULL')
             region = str('石家庄')
             update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
