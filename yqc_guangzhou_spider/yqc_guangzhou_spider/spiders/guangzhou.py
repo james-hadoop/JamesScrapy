@@ -81,7 +81,7 @@ class GuangzhouSpider(CrawlSpider):
 
         pub_time = response.xpath("//*[@id='c']/tbody/tr[4]/td/table/tbody/tr/td/text()[2]").get()
         doc_id = str('_NULL')
-        region = str('宁波')
+        region = str('广州')
         update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
         if not title:
@@ -92,20 +92,21 @@ class GuangzhouSpider(CrawlSpider):
             if key in title:
                 self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
                                   re.sub('[\s+]', ' ', pub_time), re.sub('[\s+]', ' ', pub_org), index_id, doc_id,
-                                  region, update_time)
+                                  region, update_time, key)
 
         item = YqcGuangzhouSpiderItem(cont_dict=self.cont_dict)
 
         yield item
 
-    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
+    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time, doc_key):
         time.sleep(0.3)
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
+            self.cont_dict[title]['doc_key'] = self.cont_dict[title]['doc_key'] + ',' + doc_key
         else:
             cnt_dict = {'key_cnt': 1, 'title': title, 'url': url, 'cont': cont, 'pub_time': pub_time,
                         'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id, 'region': region,
-                        'update_time': update_time}
+                        'update_time': update_time, 'doc_key': doc_key}
 
             self.cont_dict[title] = cnt_dict
 
@@ -136,10 +137,12 @@ class GuangzhouSpider(CrawlSpider):
 
             title = response.xpath("//*[@class='content_title content_title_h1']/text()").get()
             cont = response.xpath("//*[@class='content_article']").get()
-            index_id = str('_NULL')
-            pub_org = response.xpath("//*[@id='c']/tbody/tr[4]/td/table/tbody/tr/td/text()[1]").get()
+            index_id = response.xpath("//*[@id='zoomcon']/p[1]/text()").get()
+            if not index_id or index_id is None or len(index_id) < 2:
+                index_id = response.xpath("//*[@id='zoomcon']/p[1]/span/text()").get()
+            pub_org = response.xpath("//*[@id='laiyuan']/b/text()").get()
 
-            pub_time = response.xpath("//*[@id='c']/tbody/tr[4]/td/table/tbody/tr/td/text()[2]").get()
+            pub_time = response.xpath("//ul[@class='fl']/li[@class='date']/span/text()").get()
             doc_id = str('_NULL')
             region = str('广州')
             update_time = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
@@ -152,7 +155,7 @@ class GuangzhouSpider(CrawlSpider):
                 if key in title:
                     # print("\t>>> included")
                     self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                      re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+                                      re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time, key)
 
             item = YqcGuangzhouSpiderItem(cont_dict=self.cont_dict)
 

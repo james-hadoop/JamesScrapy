@@ -9,6 +9,7 @@ from twisted.enterprise import adbapi
 from pymysql import cursors
 import time
 
+
 class YqcGuangzhouSpiderPipeline(object):
     def __init__(self):
         dbparams = {'host': 'localhost',
@@ -27,9 +28,10 @@ class YqcGuangzhouSpiderPipeline(object):
     @property
     def sql(self):
         if not self._sql:
-            self._sql = """
-               insert into yqc_spider_dev(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, region, update_time, cont) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-               """
+            # self._sql = """insert into yqc_spider_dev(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt,
+            # region, update_time, cont, keys) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
+            self._sql = """insert into yqc_spider_dev(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, 
+            region, update_time, cont, doc_key) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
             return self._sql
         return self._sql
 
@@ -47,7 +49,7 @@ class YqcGuangzhouSpiderPipeline(object):
             if v['title'] not in self.titleSet:
                 cursor.execute(self.sql, (
                     v['title'], v['url'], v['pub_time'], v['pub_org'], v['doc_id'], v['index_id'],
-                    v['key_cnt'], v['region'], v['update_time'], v['cont']))
+                    v['key_cnt'], v['region'], v['update_time'], v['cont'], v['doc_key']))
 
                 self.titleSet.add(v['title'])
 
