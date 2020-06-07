@@ -27,9 +27,9 @@ class YqcWuhanSpiderPipeline(object):
     @property
     def sql(self):
         if not self._sql:
-            # self._sql = """insert into yqc_spider_dev(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt,
+            # self._sql = """insert into yqc_spider(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt,
             # region, update_time, cont, keys) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
-            self._sql = """insert into yqc_spider_dev(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, 
+            self._sql = """insert into yqc_spider(id, title, url, pub_time, pub_org, doc_id, index_id, key_cnt, 
             region, update_time, cont, doc_key) values (null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
             return self._sql
         return self._sql
