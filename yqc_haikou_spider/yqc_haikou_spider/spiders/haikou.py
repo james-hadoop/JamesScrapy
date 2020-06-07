@@ -92,20 +92,21 @@ class HaikouSpider(CrawlSpider):
         for key in keys:
             if key in title:
                 self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+                                  re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time, key)
 
         item = YqcHaikouSpiderItem(cont_dict=self.cont_dict)
 
         yield item
 
-    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time):
+    def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time, doc_key):
         time.sleep(0.3)
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
+            self.cont_dict[title]['doc_key'] = self.cont_dict[title]['doc_key'] + ',' + doc_key
         else:
             cnt_dict = {'key_cnt': 1, 'title': title, 'url': url, 'cont': cont, 'pub_time': pub_time,
                         'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id, 'region': region,
-                        'update_time': update_time}
+                        'update_time': update_time, 'doc_key': doc_key}
 
             self.cont_dict[title] = cnt_dict
 
@@ -151,7 +152,7 @@ class HaikouSpider(CrawlSpider):
             for key in keys:
                 if key in title:
                     self.dict_add_one(re.sub('[\s+]', ' ', title), response.url, re.sub('[\s+]', ' ', cont),
-                                      re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time)
+                                      re.sub('[\s+]', ' ', pub_time), pub_org, index_id, doc_id, region, update_time, key)
 
             item = YqcHaikouSpiderItem(cont_dict=self.cont_dict)
 

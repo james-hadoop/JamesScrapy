@@ -99,7 +99,7 @@ class HarbinSpider(CrawlSpider):
         yield item
 
     def dict_add_one(self, title, url, cont, pub_time, pub_org, index_id, doc_id, region, update_time, doc_key):
-        time.sleep(0.3)
+        time.sleep(0.5)
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
             self.cont_dict[title]['doc_key'] = self.cont_dict[title]['doc_key'] + ',' + doc_key
