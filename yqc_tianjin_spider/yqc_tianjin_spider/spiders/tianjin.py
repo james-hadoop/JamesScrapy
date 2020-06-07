@@ -62,10 +62,10 @@ count = 1
 class TianjinSpider(CrawlSpider):
     name = 'tianjin'
     allowed_domains = ['tj.gov.cn']
-    start_urls = ['http://www.tj.gov.cn/zw/']
+    start_urls = ['http://gk.tj.gov.cn/index_47.shtml']
 
     rules = (
-        Rule(LinkExtractor(allow=r'.*tj.gov.cn.*'),
+        Rule(LinkExtractor(allow=r'.*gk.tj.gov.cn.*'),
              callback='parse_page',
              follow=False),
     )
@@ -117,7 +117,7 @@ class TianjinSpider(CrawlSpider):
         print("4. parse_page(): " + datetime.datetime.now().strftime(
             '%Y-%m-%d %H:%M:%S.%f') + " -> " + url)
 
-        url_prefix = 'http://www.tj.gov.cn/gkml'
+        url_prefix = 'http://gk.tj.gov.cn/gkml'
 
         if str('REPORT_NDOC_006051') in url or str('REPORT_NDOC_006010') in url:
             print("\t>>> debug: " + url)
