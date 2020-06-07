@@ -43,6 +43,7 @@ class YqcHaikouSpiderPipeline(object):
 
     def insert_item(self, cursor, item):
         cont_dict = item['cont_dict']
+        time.sleep(60)
 
         for v in cont_dict.values():
             if v['title'] not in self.titleSet:

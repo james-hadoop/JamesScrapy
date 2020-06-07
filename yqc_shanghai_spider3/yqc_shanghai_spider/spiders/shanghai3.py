@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logging
+import time
 
 import scrapy
 import re
@@ -101,7 +102,7 @@ class ShanghaiSpider(CrawlSpider):
         time.sleep(0.3)
         if title in self.cont_dict:
             self.cont_dict[title]['key_cnt'] += 1
-            self.cont_dict[title]['doc_key'] = self.cont_dict[title]['doc_key'] + ',' + doc_key
+            # self.cont_dict[title]['doc_key'] = self.cont_dict[title]['doc_key'] + ',' + doc_key
         else:
             cnt_dict = {'key_cnt': 1, 'title': title, 'url': url, 'cont': cont, 'pub_time': pub_time,
                         'pub_org': pub_org, 'index_id': index_id, 'doc_id': doc_id, 'region': region,

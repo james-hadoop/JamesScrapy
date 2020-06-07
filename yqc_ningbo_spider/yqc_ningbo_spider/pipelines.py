@@ -5,6 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 import logging
+import time
 from twisted.enterprise import adbapi
 from pymysql import cursors
 import time
@@ -44,6 +45,7 @@ class YqcNingboSpiderPipeline(object):
 
     def insert_item(self, cursor, item):
         cont_dict = item['cont_dict']
+        time.sleep(60)
 
         for v in cont_dict.values():
             if v['title'] not in self.titleSet:
