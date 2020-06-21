@@ -32,3 +32,8 @@ cd yqc_suzhou_spider/ && scrapy crawl suzhou && cd ..
 
 cd yqc_xiamen_spider/ && scrapy crawl xiamen && cd ..
 
+cd yqc_changchun_spider/ && scrapy crawl changchun && cd ..
+
+cd yqc_shenyang_spider/ && scrapy crawl shenyang && cd ..
+
+cd yqc_kunming_spider/ && scrapy crawl kunming && cd ..
