@@ -9,6 +9,4 @@ import scrapy
 
 
 class YqcLanzhouSpiderItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    cont_dict = scrapy.Field()
